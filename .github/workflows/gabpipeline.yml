@@ -25,4 +25,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ougabriel/Deploy-a-tetris-Java-Application-on-Kubernetes-hosted-on-AWS-using-GitActions2:latest
+          tags: ougabriel/gab-tetris-app:latest
