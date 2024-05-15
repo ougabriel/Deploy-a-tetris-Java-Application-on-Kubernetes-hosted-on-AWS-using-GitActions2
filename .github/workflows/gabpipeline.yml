@@ -25,4 +25,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ougogabriel/gab-tetris-app
+          tags: ugogabriel/gab-tetris-app
