@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: tetris-container
-        image: ugogogabriel/tetris-app:latest
+        image: ugogabriel/tetris-app:latest
         ports:
         - containerPort: 80
         resources:
