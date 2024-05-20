@@ -6,8 +6,9 @@ on:
       - main  # this is the branch we want to trigger
 
 env:
-  REGISTRY: docker.io
-  IMAGE_NAME: ${{ github.repository }}
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+  IMAGE_NAME: ugogabriel/gab-tetris-app:latest
 
 jobs:
   build_and_push:
@@ -21,8 +22,8 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_PASSWORD }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
@@ -30,7 +31,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/gab-tetris-app:latest
+          tags: ${{ env.IMAGE_NAME }}
 
   deploy:
     name: Deploy to Kubernetes
@@ -42,7 +43,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up kubectl
-        uses: actions/setup-kubectl@v3
+        uses: azure/setup-kubectl@v3
         with:
           version: 'latest'
 
@@ -51,25 +52,25 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
 
       - name: Create namespace
-        run: kubectl apply -f k8s/namespace.yml
+        run: kubectl apply -f k8s-manifest/roles/namespace.yml
 
       - name: Create secret
-        run: kubectl apply -f k8s/secret.yml
+        run: kubectl apply -f k8s-manifest/roles/secret.yml
 
       - name: Create service account
-        run: kubectl apply -f k8s/service-account.yml
+        run: kubectl apply -f k8s-manifest/roles/service-account.yml
 
       - name: Create role
-        run: kubectl apply -f k8s/role.yml
+        run: kubectl apply -f k8s-manifest/roles/role.yml
 
       - name: Create role binding
-        run: kubectl apply -f k8s/rolebind.yml
+        run: kubectl apply -f k8s-manifest/roles/rolebind.yml
 
       - name: Deploy application
         run: |
-          kubectl apply -f k8s/deployment.yml
-          kubectl apply -f k8s/service.yml
+          kubectl apply -f k8s-manifest/deployment.yml
+          kubectl apply -f k8s-manifest/service.yml
 
       - name: Get service details
         run: |
-          kubectl get service git-actions-svc -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}' || kubectl get service git-actions-svc -o=jsonpath='{.status.loadBalancer.ingress[0].ip}'
+          kubectl get service tetris-app -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}' || kubectl get service tetris-app -o=jsonpath='{.status.loadBalancer.ingress[0].ip}'
