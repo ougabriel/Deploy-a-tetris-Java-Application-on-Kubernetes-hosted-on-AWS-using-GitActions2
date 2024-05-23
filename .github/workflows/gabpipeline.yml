@@ -46,7 +46,9 @@ jobs:
         run: mkdir -p $HOME/.kube
 
       - name: Configure kubectl
-        run: echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        run: echo "$KUBE_CONFIG" | base64 --decode > $HOME/.kube/config
 
       - name: Create namespace
         run: kubectl apply -f k8s-manifest/roles/namespace.yml
