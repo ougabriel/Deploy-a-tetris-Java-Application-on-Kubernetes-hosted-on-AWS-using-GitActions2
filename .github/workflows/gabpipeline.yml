@@ -67,7 +67,7 @@ jobs:
       - name: Create role binding
         run: kubectl apply -f k8s-manifest/roles/rolebind.yml
 
-      - name: Deploy application
+      - name: Deploy application.
         run: |
           kubectl apply -f k8s-manifest/deployment.yml
           kubectl apply -f k8s-manifest/service.yml
