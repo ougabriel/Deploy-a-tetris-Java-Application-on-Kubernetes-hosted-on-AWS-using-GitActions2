@@ -48,10 +48,12 @@ jobs:
       - name: Configure kubectl
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-        run: echo "$KUBE_CONFIG" | base64 --decode > $HOME/.kube/config
+        run: |
+          echo "$KUBE_CONFIG" | base64 --decode > $HOME/.kube/config
+          export KUBECONFIG=$HOME/.kube/config
 
       - name: Create namespace
-        run: kubectl apply -f k8s-manifest/roles/namespace.yml
+        run: kubectl apply -f k8s-manifest/roles/namespace.yml --validate=false
 
       - name: Create secret
         run: kubectl apply -f k8s-manifest/roles/secret.yml
