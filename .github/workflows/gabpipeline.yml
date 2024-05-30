@@ -49,7 +49,7 @@ jobs:
           kubectl config use-context kind-kind
           kubectl config set-context --current --namespace=tetris-app
         env:
-            K8S_TOKEN: ${{ secrets.K8S_TOKEN }}
+            K8S_TOKEN: ${{ secrets.KUBE_TOKEN }}
 
       - name: Deploy application
         run: |
