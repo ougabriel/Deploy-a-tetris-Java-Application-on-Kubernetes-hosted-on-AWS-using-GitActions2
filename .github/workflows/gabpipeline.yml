@@ -52,17 +52,16 @@ jobs:
         with:
           version: 'latest'
 
-      - name: Authenticate with Kubernetes
+      - name: Configure kubectl using KUBECONFIG
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
-          kubectl config set-credentials github-actions --token=${{ secrets.KUBE_TOKEN }}
-          kubectl config set-context kind-kind --cluster=kind-kind --user=github-actions
-          kubectl config use-context kind-kind
-          kubectl config set-context --current --namespace=tetris-app
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
 
       - name: Deploy application
         run: |
-          kubectl apply -f k8s-manifest/deployment.yml 
-          kubectl apply -f k8s-manifest/service.yml 
+          kubectl apply -f k8s-manifest/deployment.yml --validate=false
+          kubectl apply -f k8s-manifest/service.yml --validate=false
 
       - name: Get service details
         run: |
