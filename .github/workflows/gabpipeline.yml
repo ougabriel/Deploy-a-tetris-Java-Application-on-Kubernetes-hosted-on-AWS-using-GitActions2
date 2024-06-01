@@ -54,7 +54,9 @@ jobs:
 
       - name: Authenticate with Kubernetes
         run: |
-          aws eks update-kubeconfig --name your-eks-cluster-name --region us-east-1
+          kubectl config set-credentials github-actions --token=${{ secrets.KUBE_TOKEN }}
+          kubectl config set-context kind-kind --cluster=kind-kind --user=github-actions
+          kubectl config use-context kind-kind
           kubectl config set-context --current --namespace=tetris-app
 
       - name: Deploy application
