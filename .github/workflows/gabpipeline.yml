@@ -8,14 +8,14 @@ on:
 jobs:
   build_and_push:
     name: Build and Push Docker Image
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v2
+      - name: Check out the repo
+        uses: actions/checkout@v4
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
@@ -33,35 +33,27 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_and_push
 
-    permissions:
-      id-token: write
-      contents: read
-
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: arn:aws:iam::019485243761:role/EC2CustomRole
-          aws-region: us-east-1
+      - name: Check out the repo
+        uses: actions/checkout@v4
 
       - name: Set up kubectl
-        uses: azure/setup-kubectl@v1
+        uses: actions/setup-kubectl@v3
         with:
           version: 'latest'
 
-      - name: Configure kubectl using KUBECONFIG
+      - name: Create .kube directory
+        run: mkdir -p $HOME/.kube
+
+      - name: Configure kubectl
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
-        run: |
-          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+          KUBE_CONFIG: ${{ secrets.KUBE_TOKEN }}
+        run: echo "$KUBE_TOKEN" | base64 --decode > $HOME/.kube/config
 
       - name: Deploy application
         run: |
-          kubectl apply -f k8s-manifest/deployment.yml --validate=false
-          kubectl apply -f k8s-manifest/service.yml --validate=false
+          kubectl apply -f k8s-manifest/deployment.yml
+          kubectl apply -f k8s-manifest/service.yml
 
       - name: Get service details
         run: |
