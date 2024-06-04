@@ -7,7 +7,7 @@ on:
 
 jobs:
   build_and_push:
-    name: Build and Push Docker Image.
+    name: Build and Push Docker Image.-
     runs-on: self-hosted
 
     steps:
