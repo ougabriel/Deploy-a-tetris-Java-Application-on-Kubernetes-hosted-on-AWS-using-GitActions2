@@ -7,7 +7,7 @@ on:
 
 jobs:
   build_and_push:
-    name: Build and Push Docker Image.-
+    name: Build and Push Docker Image
     runs-on: self-hosted
 
     steps:
@@ -31,26 +31,14 @@ jobs:
   deploy:
     name: Deploy to Kubernetes
     runs-on: self-hosted
-    needs: build_and_push
 
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
-
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
+      - name: Kubectl Action
+        uses: tale/kubectl-action@v1
         with:
-          version: 'latest'
+          base64-kube-config: ${{ secrets.KUBE_TOKEN }}
 
-      - name: Create .kube directory
-        run: mkdir -p $HOME/.kube
-
-      - name: Configure kubectl
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_TOKEN }}
-        run: echo "$KUBE_TOKEN" | base64 --decode > $HOME/.kube/config
-
-      - name: Deploy application
+      - name: Apply Kubernetes Manifests
         run: |
           kubectl apply -f k8s-manifest/deployment.yml
           kubectl apply -f k8s-manifest/service.yml
