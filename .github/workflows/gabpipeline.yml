@@ -43,6 +43,6 @@ jobs:
           kubectl apply -f k8s-manifest/deployment.yml
           kubectl apply -f k8s-manifest/service.yml
 
-      - name: Get service details
+      - name: Get service details.
         run: |
           kubectl get service tetris-app -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}' || kubectl get service gab-tetris-app -o=jsonpath='{.status.loadBalancer.ingress[0].ip}'
