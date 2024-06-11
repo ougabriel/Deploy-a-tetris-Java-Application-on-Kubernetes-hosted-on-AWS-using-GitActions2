@@ -8,7 +8,7 @@ on:
 jobs:
   build_and_push:
     name: Build and Push Docker Image
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Check out the repo
@@ -30,7 +30,7 @@ jobs:
 
   deploy:
     name: Deploy to Kubernetes
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Kubectl Action
