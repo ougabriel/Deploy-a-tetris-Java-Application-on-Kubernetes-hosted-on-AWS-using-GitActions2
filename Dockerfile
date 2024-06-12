@@ -1,20 +1,14 @@
-# Use node:14 as the base image
-FROM node:14
+# Use the official Nginx image as the base
+FROM nginx:latest
 
-# Set the working directory inside the container
-WORKDIR /app
+# Remove the default Nginx configuration
+RUN rm -rf /usr/share/nginx/html/*
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+# Copy the Tetris game files to the Nginx HTML directory
+COPY . /usr/share/nginx/html
 
-# Install dependencies
-RUN npm install
+# Expose the port Nginx will listen on
+EXPOSE 80
 
-# Copy the rest of the application files to the working directory
-COPY . .
-
-# Expose the port the app runs on
-EXPOSE 3000
-
-# Command to run the application
-CMD ["node", "gab-tetris.js"]
+# Start Nginx when the container launches
+CMD ["nginx", "-g", "daemon off;"]
