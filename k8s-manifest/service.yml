@@ -4,7 +4,7 @@ metadata:
   name: tetris-app
   namespace: tetris-app
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: tetris-app
   ports:
