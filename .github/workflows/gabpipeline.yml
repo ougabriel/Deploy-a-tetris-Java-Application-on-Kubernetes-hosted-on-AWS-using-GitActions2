@@ -45,4 +45,4 @@ jobs:
 
       - name: Get service details.
         run: |
-          kubectl get service tetris-app -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}' || kubectl get service gab-tetris-app -o=jsonpath='{.status.loadBalancer.ingress[0].ip}'
+          kubectl get service tetris-app -n tetris-app -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}' || kubectl get service gab-tetris-app -o=jsonpath='{.status.loadBalancer.ingress[0].ip}'
