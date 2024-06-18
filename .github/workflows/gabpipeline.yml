@@ -40,9 +40,9 @@ jobs:
 
       - name: Apply Kubernetes Manifests
         run: |
-          kubectl apply -f /k8s-manifest/deployment.yml
-          kubectl apply -f /k8s-manifest/service.yml
-          kubectl apply -f /k8s-manifest/ingress.yml  #this apply Ingress resource
+          kubectl apply -f k8s-manifest/deployment.yml
+          kubectl apply -f k8s-manifest/service.yml
+          kubectl apply -f k8s-manifest/ingress.yml  #this apply Ingress resource
 
       - name: Get Ingress IP
         id: get-ingress-ip
