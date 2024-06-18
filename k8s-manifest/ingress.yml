@@ -11,6 +11,6 @@ spec:
             path: /
             backend:
               service:
-                name: tetris-app  # Replace with your Service name
+                name: tetris-app  # Service name
                 port:
                   number: 80
