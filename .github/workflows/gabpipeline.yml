@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build and push Docker image.
+      - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -42,7 +42,14 @@ jobs:
         run: |
           kubectl apply -f k8s-manifest/deployment.yml
           kubectl apply -f k8s-manifest/service.yml
+          kubectl apply -f k8s-manifest/ingress.yml  #this apply Ingress resource
 
-      - name: Get service details.
+      - name: Get Ingress IP
+        id: get-ingress-ip
         run: |
-          kubectl get service tetris-app -n tetris-app -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}' || kubectl get service gab-tetris-app -o=jsonpath='{.status.loadBalancer.ingress[0].ip}'
+          INGRESS_IP=$(kubectl get ingress gab-tetris-app -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          echo "::set-output name=ingress_ip::$INGRESS_IP"
+
+      - name: Output Ingress IP
+        run: |
+          echo "Ingress IP: ${{ steps.get-ingress-ip.outputs.ingress_ip }}"

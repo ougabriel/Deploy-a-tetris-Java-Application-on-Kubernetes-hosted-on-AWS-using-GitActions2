@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gab-tetris-app
+spec:
+  rules:
+    - host: your-domain.com  # Replace with your actual domain or IP
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: tetris-app  # Replace with your Service name
+                port:
+                  number: 80
