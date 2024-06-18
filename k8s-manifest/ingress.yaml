@@ -4,7 +4,7 @@ metadata:
   name: gab-tetris-app
 spec:
   rules:
-    - host: your-domain.com  # Replace with your actual domain or IP
+    - host: 3.239.253.108  # Replace with your actual domain or IP.
       http:
         paths:
           - pathType: Prefix
