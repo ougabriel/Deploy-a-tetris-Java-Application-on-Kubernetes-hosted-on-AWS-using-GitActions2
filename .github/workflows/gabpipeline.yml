@@ -1,4 +1,4 @@
-name: gabpipeline
+name: gabpipeline #name of pipeline
 
 on: 
   push:
