@@ -3,7 +3,7 @@ name: gabpipeline
 on: 
   push:
     branches:
-      - main  # this is the branch we want to trigger
+      - main  ## this is the branch we want to trigger
 
 jobs:
   build_and_push:
@@ -34,7 +34,7 @@ jobs:
 
     steps:
       - name: Kubectl Action
-        uses: tale/kubectl-action@v1
+        uses: tale/kubectl-action@v1  ##**
         with:
           base64-kube-config: ${{ secrets.KUBE_TOKEN }}
 
